@@ -366,6 +366,8 @@ get_argc_argv(int *argc_o, char ***argv_o)
     argv_t **argv_py = NULL;
     char **argv = NULL;
     char *arg0 = NULL;
+    char *set_argc_delta = NULL;
+    char *set_argv0 = NULL;
     int rv = -1;
 
 #ifndef IS_PYPY
@@ -399,6 +401,17 @@ get_argc_argv(int *argc_o, char ***argv_o)
         if (0 > get_args_from_proc(&argc, &arg0)) {
             spt_debug("failed to get args from proc fs");
             goto exit;
+        }
+    }
+
+    if ((set_argc_delta = getenv("SPT_ARGC_DELTA"))) {
+        if ((set_argv0 = getenv("SPT_ARGV0"))) {
+            int d;
+            if (sscanf(set_argc_delta, "%d", &d) == 1 && d > 0) {
+                argc += d;
+                argv = NULL;
+                arg0 = strdup(set_argv0);
+            }
         }
     }
 

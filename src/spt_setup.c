@@ -404,7 +404,7 @@ get_argc_argv(int *argc_o, char ***argv_o)
         }
     }
 
-    if ((set_argc_delta = getenv("SPT_ARGC_DELTA"))) {
+    if (argc > 0 && (set_argc_delta = getenv("SPT_ARGC_DELTA"))) {
         if ((set_argv0 = getenv("SPT_ARGV0"))) {
             int d;
             if (sscanf(set_argc_delta, "%d", &d) == 1 && d > 0) {
